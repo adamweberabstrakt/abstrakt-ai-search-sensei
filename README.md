@@ -3,7 +3,7 @@
 **AI Search Visibility & Backlink Analysis Tool**  
 Built by Abstrakt Marketing Group
 
----
+---  
 
 ## 🚀 Features
 
