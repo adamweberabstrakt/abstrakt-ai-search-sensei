@@ -1,42 +1,9 @@
 {
-  "version": 2,
-  "builds": [
-    {
-      "src": "package.json",
-      "use": "@vercel/static-build",
-      "config": {
-        "distDir": "build"
-      }
-    },
-    {
-      "src": "api/**/*.js",
-      "use": "@vercel/node"
-    }
-  ],
-  "routes": [
-    {
-      "src": "/api/(.*)",
-      "dest": "/api/$1"
-    },
-    {
-      "src": "/(.*)",
-      "dest": "/index.html"
-    }
-  ],
+  "buildCommand": "npm run build",
+  "outputDirectory": "build",
   "functions": {
-    "api/analyze.js": {
-      "maxDuration": 60,
-      "memory": 1024
-    },
-    "api/semrush.js": {
-      "maxDuration": 30
-    },
-    "api/send-report.js": {
-      "maxDuration": 60,
-      "memory": 1024
-    },
-    "api/test.js": {
-      "maxDuration": 30
+    "api/*.js": {
+      "maxDuration": 60
     }
   }
 }
