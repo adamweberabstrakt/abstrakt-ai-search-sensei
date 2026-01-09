@@ -40,7 +40,7 @@ module.exports = async function handler(req, res) {
     });
   }
 
-  console.log(`Generating report for ${recipientName} at ${recipientCompany}`);
+  console.log(`Generating AI Reputation Report for ${recipientName} at ${recipientCompany}`);
 
   try {
     // Generate PDF
@@ -50,13 +50,13 @@ module.exports = async function handler(req, res) {
     const resend = new Resend(resendKey);
     
     const { data, error } = await resend.emails.send({
-      from: 'Entity SEO Report <onboarding@resend.dev>',
+      from: 'AI Reputation Report <onboarding@resend.dev>',
       to: [recipientEmail],
-      subject: `Entity SEO Analysis Report - ${reportData.companyName || 'Your Company'}`,
+      subject: `AI Reputation Report - ${reportData.companyName || 'Your Company'}`,
       html: generateEmailHTML(recipientName, recipientCompany, reportData),
       attachments: [
         {
-          filename: `Entity-SEO-Report-${reportData.companyName || 'Analysis'}-${new Date().toISOString().split('T')[0]}.pdf`,
+          filename: `AI-Reputation-Report-${reportData.companyName || 'Analysis'}-${new Date().toISOString().split('T')[0]}.pdf`,
           content: pdfBuffer.toString('base64'),
           type: 'application/pdf'
         }
@@ -84,14 +84,14 @@ module.exports = async function handler(req, res) {
   }
 };
 
-// Generate PDF using PDFKit
+// Generate PDF using PDFKit - each section as a page
 async function generatePDF(reportData, recipientName, recipientCompany) {
   return new Promise((resolve, reject) => {
     const doc = new PDFDocument({ 
       size: 'LETTER',
       margin: 50,
       info: {
-        Title: `Entity SEO Report - ${reportData.companyName}`,
+        Title: `AI Reputation Report - ${reportData.companyName}`,
         Author: 'Abstrakt Marketing Group'
       }
     });
@@ -107,278 +107,464 @@ async function generatePDF(reportData, recipientName, recipientCompany) {
     const darkColor = '#1a1a2e';
     const grayColor = '#666666';
 
-    // Header
-    doc.rect(0, 0, doc.page.width, 120).fill(darkColor);
-    doc.fillColor('#ffffff')
-       .fontSize(28)
-       .font('Helvetica-Bold')
-       .text('Entity SEO Analysis Report', 50, 40);
-    doc.fontSize(12)
-       .font('Helvetica')
-       .fillColor(secondaryColor)
-       .text('AI Search Visibility Analysis by Abstrakt Marketing Group', 50, 75);
-    doc.fillColor('#cccccc')
-       .fontSize(10)
-       .text(`Generated: ${new Date().toLocaleDateString('en-US', { 
-         year: 'numeric', month: 'long', day: 'numeric' 
-       })}`, 50, 95);
-
-    doc.moveDown(4);
-
-    // Report Info
-    doc.fillColor(darkColor)
-       .fontSize(14)
-       .font('Helvetica-Bold')
-       .text('Prepared For:', 50, 140);
-    doc.fontSize(12)
-       .font('Helvetica')
-       .fillColor(grayColor)
-       .text(`${recipientName}`, 50, 160)
-       .text(`${recipientCompany}`, 50, 175);
-
-    if (reportData.companyName) {
-      doc.fillColor(darkColor)
-         .fontSize(14)
+    // Helper functions
+    const drawHeader = (title, subtitle = null) => {
+      doc.rect(0, 0, doc.page.width, 100).fill(darkColor);
+      doc.fillColor('#ffffff')
+         .fontSize(24)
          .font('Helvetica-Bold')
-         .text('Company Analyzed:', 300, 140);
-      doc.fontSize(12)
-         .font('Helvetica')
-         .fillColor(grayColor)
-         .text(reportData.companyName, 300, 160);
-      if (reportData.website) {
-        doc.text(reportData.website, 300, 175);
+         .text(title, 50, 35);
+      if (subtitle) {
+        doc.fontSize(12)
+           .font('Helvetica')
+           .fillColor(secondaryColor)
+           .text(subtitle, 50, 65);
       }
-    }
+      doc.moveDown(4);
+    };
 
-    doc.moveDown(3);
-    let yPos = 220;
+    const drawSectionTitle = (title, yPos) => {
+      doc.fillColor(primaryColor)
+         .fontSize(16)
+         .font('Helvetica-Bold')
+         .text(title, 50, yPos);
+      return yPos + 25;
+    };
 
-    // Divider
-    doc.moveTo(50, yPos).lineTo(562, yPos).stroke(primaryColor);
-    yPos += 20;
+    const getScoreColor = (score) => {
+      if (score >= 8) return '#22c55e';
+      if (score >= 6) return '#3b82f6';
+      if (score >= 4) return '#eab308';
+      if (score >= 2) return '#f97316';
+      return '#ef4444';
+    };
 
-    // Executive Summary
-    doc.fillColor(primaryColor)
-       .fontSize(16)
+    const getScoreLabel = (score) => {
+      if (score >= 8) return 'Excellent';
+      if (score >= 6) return 'Good';
+      if (score >= 4) return 'Needs Work';
+      if (score >= 2) return 'Poor';
+      return 'Critical';
+    };
+
+    // ==================== PAGE 1: Cover Page ====================
+    doc.rect(0, 0, doc.page.width, doc.page.height).fill(darkColor);
+    
+    // Logo area
+    doc.fillColor('#ffffff')
+       .fontSize(14)
+       .font('Helvetica')
+       .text('ABSTRAKT MARKETING GROUP', 50, 80, { align: 'center' });
+    
+    // Main title
+    doc.fontSize(42)
        .font('Helvetica-Bold')
-       .text('Executive Summary', 50, yPos);
-    yPos += 25;
+       .fillColor(primaryColor)
+       .text('AI Reputation', 50, 200, { align: 'center' });
+    doc.text('Report', 50, 255, { align: 'center' });
+    
+    // Company name
+    doc.fillColor('#ffffff')
+       .fontSize(24)
+       .font('Helvetica')
+       .text(reportData.companyName || 'Company Analysis', 50, 350, { align: 'center' });
+    
+    // Prepared for
+    doc.fontSize(14)
+       .fillColor('rgba(255,255,255,0.7)')
+       .text('Prepared for:', 50, 450, { align: 'center' });
+    doc.fontSize(18)
+       .fillColor('#ffffff')
+       .text(`${recipientName}`, 50, 475, { align: 'center' });
+    doc.fontSize(14)
+       .text(`${recipientCompany}`, 50, 500, { align: 'center' });
+    
+    // Date
+    doc.fontSize(12)
+       .fillColor(secondaryColor)
+       .text(new Date().toLocaleDateString('en-US', { 
+         year: 'numeric', month: 'long', day: 'numeric' 
+       }), 50, 550, { align: 'center' });
 
-    // Calculate average scores
+    // ==================== PAGE 2: Executive Overview ====================
+    doc.addPage();
+    drawHeader('Executive Overview', 'AI Search Visibility Summary');
+    
+    let yPos = 120;
+    
+    // Calculate scores
     const companyResults = reportData.company || {};
     const avgScore = calculateAverageScore(companyResults);
     const avgSentiment = calculateAverageSentiment(companyResults);
-
+    
+    // Quick Stats
     doc.fillColor(darkColor)
-       .fontSize(11)
-       .font('Helvetica')
+       .fontSize(12)
+       .font('Helvetica-Bold')
+       .text('KEY METRICS', 50, yPos);
+    yPos += 25;
+    
+    doc.font('Helvetica')
+       .fontSize(11);
+    
+    doc.fillColor(getScoreColor(avgScore))
        .text(`Overall AI Visibility Score: ${avgScore}/10 (${getScoreLabel(avgScore)})`, 50, yPos);
     yPos += 18;
-    doc.text(`Overall Sentiment: ${avgSentiment}`, 50, yPos);
-    yPos += 30;
-
-    // AI Search Engine Results
-    doc.fillColor(primaryColor)
-       .fontSize(16)
-       .font('Helvetica-Bold')
-       .text('AI Search Engine Visibility', 50, yPos);
-    yPos += 25;
-
+    
+    doc.fillColor(darkColor)
+       .text(`Overall Sentiment: ${avgSentiment}`, 50, yPos);
+    yPos += 18;
+    
+    if (reportData.semrushData?.authorityScore) {
+      doc.text(`Domain Authority: ${reportData.semrushData.authorityScore}`, 50, yPos);
+      yPos += 18;
+    }
+    
+    if (reportData.semrushData?.backlinks?.referringDomains) {
+      doc.text(`Referring Domains: ${reportData.semrushData.backlinks.referringDomains.toLocaleString()}`, 50, yPos);
+      yPos += 18;
+    }
+    
+    yPos += 20;
+    
+    // AI Engine Breakdown
+    yPos = drawSectionTitle('AI Search Engine Breakdown', yPos);
+    
     Object.entries(companyResults).forEach(([llmId, data]) => {
       if (yPos > 680) {
         doc.addPage();
         yPos = 50;
       }
-
-      const result = data.results || {};
-      const score = result.confidenceScore || 0;
-      
-      // LLM Name
+      const score = data.results?.confidenceScore || 0;
       doc.fillColor(darkColor)
-         .fontSize(12)
+         .fontSize(11)
          .font('Helvetica-Bold')
-         .text(`${data.llm?.name || llmId}`, 50, yPos);
-      
-      // Score badge
-      doc.fillColor(getScoreColorHex(score))
-         .text(`${score}/10 - ${getScoreLabel(score)}`, 400, yPos);
+         .text(`${data.llm?.name || llmId}:`, 50, yPos);
+      doc.fillColor(getScoreColor(score))
+         .font('Helvetica')
+         .text(`${score}/10 - ${getScoreLabel(score)}`, 200, yPos);
       yPos += 18;
-
-      // Summary
-      if (result.summary) {
-        doc.fillColor(grayColor)
-           .fontSize(10)
-           .font('Helvetica')
-           .text(result.summary.substring(0, 300) + (result.summary.length > 300 ? '...' : ''), 50, yPos, {
-             width: 500,
-             align: 'left'
-           });
-        yPos += doc.heightOfString(result.summary.substring(0, 300), { width: 500 }) + 10;
-      }
-
-      // Recommendations
-      if (result.recommendations) {
-        doc.fillColor(primaryColor)
-           .fontSize(10)
-           .font('Helvetica-Bold')
-           .text('Recommendation:', 50, yPos);
-        yPos += 14;
-        doc.fillColor(grayColor)
-           .font('Helvetica')
-           .text(result.recommendations.substring(0, 250), 50, yPos, { width: 500 });
-        yPos += doc.heightOfString(result.recommendations.substring(0, 250), { width: 500 }) + 15;
-      }
-
-      yPos += 10;
     });
 
-    // Leadership Section
-    if (reportData.leadership && reportData.leadership.length > 0) {
-      if (yPos > 600) {
-        doc.addPage();
-        yPos = 50;
-      }
-
-      doc.fillColor(primaryColor)
-         .fontSize(16)
-         .font('Helvetica-Bold')
-         .text('Leadership Visibility Analysis', 50, yPos);
-      yPos += 25;
-
-      reportData.leadership.forEach(leader => {
-        if (yPos > 680) {
-          doc.addPage();
-          yPos = 50;
-        }
-
-        doc.fillColor(darkColor)
-           .fontSize(12)
-           .font('Helvetica-Bold')
-           .text(`${leader.name}${leader.title ? ` - ${leader.title}` : ''}`, 50, yPos);
-        yPos += 20;
-
-        if (leader.byLLM) {
-          Object.entries(leader.byLLM).forEach(([llmId, data]) => {
-            const sentimentScore = data.results?.sentimentScore || 5;
-            doc.fillColor(grayColor)
-               .fontSize(10)
-               .font('Helvetica')
-               .text(`${data.llm?.name}: Sentiment Score ${sentimentScore}/10`, 70, yPos);
-            yPos += 15;
-          });
-        }
-        yPos += 10;
-      });
-    }
-
-    // SEMRush Data Section
+    // ==================== PAGE 3: Company Analysis ====================
+    doc.addPage();
+    drawHeader('Company Analysis', reportData.companyName);
+    
+    yPos = 120;
+    
+    // SEMRush Data
     if (reportData.semrushData) {
-      if (yPos > 550) {
-        doc.addPage();
-        yPos = 50;
-      }
-
-      doc.fillColor(primaryColor)
-         .fontSize(16)
-         .font('Helvetica-Bold')
-         .text('SEMRush Backlink Analysis', 50, yPos);
-      yPos += 25;
-
+      yPos = drawSectionTitle('Backlink Profile (SEMRush)', yPos);
+      
       const semrush = reportData.semrushData;
+      doc.fillColor(darkColor).fontSize(11).font('Helvetica');
       
       if (semrush.authorityScore !== undefined) {
-        doc.fillColor(darkColor)
-           .fontSize(11)
-           .font('Helvetica')
-           .text(`Domain Authority Score: ${semrush.authorityScore}`, 50, yPos);
-        yPos += 18;
+        doc.text(`Domain Authority Score: ${semrush.authorityScore}`, 50, yPos);
+        yPos += 16;
       }
-
       if (semrush.backlinks) {
         doc.text(`Total Backlinks: ${semrush.backlinks.total?.toLocaleString() || 'N/A'}`, 50, yPos);
-        yPos += 15;
+        yPos += 16;
         doc.text(`Referring Domains: ${semrush.backlinks.referringDomains?.toLocaleString() || 'N/A'}`, 50, yPos);
-        yPos += 15;
+        yPos += 16;
         doc.text(`Follow Links: ${semrush.backlinks.followLinks?.toLocaleString() || 'N/A'}`, 50, yPos);
-        yPos += 15;
-        doc.text(`NoFollow Links: ${semrush.backlinks.nofollowLinks?.toLocaleString() || 'N/A'}`, 50, yPos);
-        yPos += 25;
+        yPos += 16;
       }
-
+      yPos += 15;
+      
       // Top Backlinks
       if (semrush.topBacklinks && semrush.topBacklinks.length > 0) {
-        doc.fillColor(darkColor)
-           .fontSize(12)
-           .font('Helvetica-Bold')
-           .text('Top Referring Domains:', 50, yPos);
+        doc.font('Helvetica-Bold').text('Top Referring Domains:', 50, yPos);
         yPos += 18;
-
-        semrush.topBacklinks.slice(0, 10).forEach((link, i) => {
-          if (yPos > 700) {
-            doc.addPage();
-            yPos = 50;
-          }
+        
+        doc.font('Helvetica').fontSize(10);
+        semrush.topBacklinks.slice(0, 8).forEach((link, i) => {
+          if (yPos > 700) return;
           doc.fillColor(grayColor)
-             .fontSize(9)
-             .font('Helvetica')
-             .text(`${i + 1}. ${link.sourceUrl?.substring(0, 60) || 'Unknown'} (AS: ${link.authorityScore})`, 60, yPos);
+             .text(`${i + 1}. ${link.sourceUrl?.substring(0, 55) || 'Unknown'} (AS: ${link.authorityScore})`, 60, yPos);
           yPos += 14;
         });
       }
     }
+    
+    yPos += 20;
+    
+    // AI Analysis Results
+    yPos = drawSectionTitle('AI Search Engine Results', yPos);
+    
+    Object.entries(companyResults).forEach(([llmId, data]) => {
+      if (yPos > 650) {
+        doc.addPage();
+        yPos = 50;
+      }
+      
+      const result = data.results || {};
+      doc.fillColor(darkColor)
+         .fontSize(12)
+         .font('Helvetica-Bold')
+         .text(data.llm?.name || llmId, 50, yPos);
+      yPos += 18;
+      
+      if (result.summary) {
+        doc.fillColor(grayColor)
+           .fontSize(10)
+           .font('Helvetica')
+           .text(result.summary.substring(0, 400), 50, yPos, { width: 500 });
+        yPos += doc.heightOfString(result.summary.substring(0, 400), { width: 500 }) + 10;
+      }
+      
+      if (result.recommendations) {
+        doc.fillColor(primaryColor).font('Helvetica-Bold').text('Recommendation:', 50, yPos);
+        yPos += 14;
+        doc.fillColor(grayColor).font('Helvetica').text(result.recommendations.substring(0, 300), 50, yPos, { width: 500 });
+        yPos += doc.heightOfString(result.recommendations.substring(0, 300), { width: 500 }) + 15;
+      }
+    });
 
-    // Competitor Comparison
+    // ==================== PAGE 4: Leadership Analysis ====================
+    if (reportData.leadership && reportData.leadership.length > 0) {
+      doc.addPage();
+      drawHeader('Leadership Analysis', 'Reputation & Press Opportunities');
+      
+      yPos = 120;
+      
+      reportData.leadership.forEach(leader => {
+        if (yPos > 600) {
+          doc.addPage();
+          yPos = 50;
+        }
+        
+        doc.fillColor(darkColor)
+           .fontSize(14)
+           .font('Helvetica-Bold')
+           .text(leader.name, 50, yPos);
+        yPos += 18;
+        
+        if (leader.title) {
+          doc.fillColor(grayColor)
+             .fontSize(10)
+             .font('Helvetica')
+             .text(leader.title, 50, yPos);
+          yPos += 16;
+        }
+        
+        // Reputation scores
+        doc.fillColor(primaryColor).fontSize(11).font('Helvetica-Bold').text('Reputation Scores:', 50, yPos);
+        yPos += 16;
+        
+        if (leader.byLLM) {
+          Object.entries(leader.byLLM).forEach(([llmId, data]) => {
+            const score = data.results?.sentimentScore || 5;
+            doc.fillColor(grayColor)
+               .fontSize(10)
+               .font('Helvetica')
+               .text(`${data.llm?.name}: ${score}/10`, 60, yPos);
+            yPos += 14;
+          });
+        }
+        yPos += 10;
+        
+        // Press Opportunities
+        if (leader.pressOpportunities) {
+          doc.fillColor(primaryColor).fontSize(11).font('Helvetica-Bold').text('Press Opportunities:', 50, yPos);
+          yPos += 16;
+          
+          Object.entries(leader.pressOpportunities).slice(0, 1).forEach(([llmId, data]) => {
+            if (data.results?.summary) {
+              doc.fillColor(grayColor)
+                 .fontSize(10)
+                 .font('Helvetica')
+                 .text(data.results.summary.substring(0, 350), 60, yPos, { width: 480 });
+              yPos += doc.heightOfString(data.results.summary.substring(0, 350), { width: 480 }) + 10;
+            }
+          });
+        }
+        
+        yPos += 20;
+      });
+    }
+
+    // ==================== PAGE 5: Gap Analysis ====================
     if (reportData.competitors && reportData.competitors.length > 0) {
       doc.addPage();
-      yPos = 50;
-
-      doc.fillColor(primaryColor)
-         .fontSize(16)
-         .font('Helvetica-Bold')
-         .text('Competitor Analysis', 50, yPos);
+      drawHeader('Competitor Gap Analysis', 'Backlink & Visibility Comparison');
+      
+      yPos = 120;
+      
+      // Comparison table header
+      doc.fillColor(darkColor).fontSize(10).font('Helvetica-Bold');
+      doc.text('Company', 50, yPos);
+      doc.text('Authority', 200, yPos);
+      doc.text('Backlinks', 280, yPos);
+      doc.text('Ref. Domains', 370, yPos);
+      doc.text('AI Score', 470, yPos);
+      yPos += 20;
+      
+      doc.moveTo(50, yPos - 5).lineTo(550, yPos - 5).stroke(primaryColor);
+      
+      // Your company
+      doc.font('Helvetica-Bold');
+      doc.text(`${reportData.companyName} (You)`, 50, yPos);
+      doc.font('Helvetica');
+      doc.text(reportData.semrushData?.authorityScore?.toString() || '-', 200, yPos);
+      doc.text(reportData.semrushData?.backlinks?.total?.toLocaleString() || '-', 280, yPos);
+      doc.text(reportData.semrushData?.backlinks?.referringDomains?.toLocaleString() || '-', 370, yPos);
+      doc.text(`${calculateAverageScore(reportData.company)}/10`, 470, yPos);
+      yPos += 18;
+      
+      // Competitors
+      reportData.competitors.forEach(comp => {
+        doc.text(comp.name, 50, yPos);
+        doc.text(comp.semrushData?.authorityScore?.toString() || '-', 200, yPos);
+        doc.text(comp.semrushData?.backlinks?.total?.toLocaleString() || '-', 280, yPos);
+        doc.text(comp.semrushData?.backlinks?.referringDomains?.toLocaleString() || '-', 370, yPos);
+        const compScore = calculateAverageScore(comp.byLLM);
+        doc.text(`${compScore}/10`, 470, yPos);
+        yPos += 18;
+      });
+      
       yPos += 25;
-
-      reportData.competitors.forEach(competitor => {
+      
+      // Competitor backlink opportunities
+      reportData.competitors.forEach(comp => {
         if (yPos > 650) {
           doc.addPage();
           yPos = 50;
         }
-
-        doc.fillColor(darkColor)
-           .fontSize(12)
-           .font('Helvetica-Bold')
-           .text(competitor.name, 50, yPos);
-        if (competitor.website) {
-          doc.fillColor(grayColor)
-             .fontSize(10)
-             .font('Helvetica')
-             .text(competitor.website, 200, yPos);
-        }
-        yPos += 20;
-
-        // Competitor SEMRush data if available
-        if (competitor.semrushData) {
-          doc.fillColor(grayColor)
-             .fontSize(10)
-             .text(`Authority Score: ${competitor.semrushData.authorityScore || 'N/A'}`, 70, yPos);
+        
+        if (comp.semrushData?.topBacklinks && comp.semrushData.topBacklinks.length > 0) {
+          doc.fillColor(primaryColor).fontSize(11).font('Helvetica-Bold')
+             .text(`${comp.name}'s Top Backlinks (Gap Opportunities):`, 50, yPos);
+          yPos += 18;
+          
+          doc.fillColor(grayColor).fontSize(9).font('Helvetica');
+          comp.semrushData.topBacklinks.slice(0, 5).forEach((link, i) => {
+            doc.text(`${i + 1}. ${link.sourceUrl?.substring(0, 60) || 'Unknown'} (AS: ${link.authorityScore})`, 60, yPos);
+            yPos += 13;
+          });
           yPos += 15;
-          if (competitor.semrushData.backlinks) {
-            doc.text(`Backlinks: ${competitor.semrushData.backlinks.total?.toLocaleString() || 'N/A'}`, 70, yPos);
-            yPos += 15;
-            doc.text(`Referring Domains: ${competitor.semrushData.backlinks.referringDomains?.toLocaleString() || 'N/A'}`, 70, yPos);
-            yPos += 20;
-          }
         }
       });
     }
 
-    // Footer on last page
-    doc.fillColor(grayColor)
-       .fontSize(9)
-       .text('© Abstrakt Marketing Group | Entity SEO Checker', 50, doc.page.height - 50, {
-         align: 'center',
-         width: doc.page.width - 100
-       });
+    // ==================== PAGE 6: Podcast Opportunities ====================
+    if (reportData.podcastOpportunities && reportData.podcastOpportunities.length > 0) {
+      doc.addPage();
+      drawHeader('Podcast Opportunities', 'Guest Appearance Recommendations');
+      
+      yPos = 120;
+      
+      reportData.podcastOpportunities.forEach(item => {
+        if (yPos > 650) {
+          doc.addPage();
+          yPos = 50;
+        }
+        
+        doc.fillColor(darkColor)
+           .fontSize(12)
+           .font('Helvetica-Bold')
+           .text(`Source: ${item.llm?.name}`, 50, yPos);
+        yPos += 18;
+        
+        if (item.results?.summary) {
+          doc.fillColor(grayColor)
+             .fontSize(10)
+             .font('Helvetica')
+             .text(item.results.summary.substring(0, 400), 50, yPos, { width: 500 });
+          yPos += doc.heightOfString(item.results.summary.substring(0, 400), { width: 500 }) + 10;
+        }
+        
+        if (item.results?.podcastOpportunities && item.results.podcastOpportunities.length > 0) {
+          doc.fillColor(primaryColor).font('Helvetica-Bold').text('Recommended Podcasts:', 50, yPos);
+          yPos += 16;
+          
+          item.results.podcastOpportunities.slice(0, 5).forEach((pod, i) => {
+            doc.fillColor(grayColor).fontSize(10).font('Helvetica');
+            doc.text(`${i + 1}. ${pod.name}${pod.topic ? ` - ${pod.topic}` : ''}${pod.audienceSize ? ` (${pod.audienceSize})` : ''}`, 60, yPos);
+            yPos += 14;
+          });
+        }
+        
+        yPos += 20;
+      });
+    }
+
+    // ==================== PAGE 7: Social Sentiment ====================
+    if (reportData.leadership && reportData.leadership.some(l => l.socialSentiment)) {
+      doc.addPage();
+      drawHeader('Social Sentiment Analysis', 'Online Reputation by Platform');
+      
+      yPos = 120;
+      
+      reportData.leadership.forEach(leader => {
+        if (!leader.socialSentiment || Object.keys(leader.socialSentiment).length === 0) return;
+        
+        if (yPos > 600) {
+          doc.addPage();
+          yPos = 50;
+        }
+        
+        doc.fillColor(darkColor)
+           .fontSize(14)
+           .font('Helvetica-Bold')
+           .text(leader.name, 50, yPos);
+        yPos += 16;
+        
+        if (leader.title) {
+          doc.fillColor(grayColor).fontSize(10).font('Helvetica').text(leader.title, 50, yPos);
+          yPos += 18;
+        }
+        
+        Object.entries(leader.socialSentiment).forEach(([llmId, data]) => {
+          if (yPos > 680) return;
+          
+          const score = data.results?.sentimentScore || 5;
+          const sentiment = data.results?.sentiment || 'neutral';
+          
+          doc.fillColor(darkColor).fontSize(11).font('Helvetica-Bold')
+             .text(`${data.llm?.name}: `, 50, yPos);
+          doc.fillColor(getScoreColor(score)).font('Helvetica')
+             .text(`${score}/10 (${sentiment})`, 180, yPos);
+          yPos += 16;
+          
+          if (data.results?.summary) {
+            doc.fillColor(grayColor).fontSize(10).font('Helvetica')
+               .text(data.results.summary.substring(0, 300), 60, yPos, { width: 480 });
+            yPos += doc.heightOfString(data.results.summary.substring(0, 300), { width: 480 }) + 10;
+          }
+        });
+        
+        yPos += 20;
+      });
+    }
+
+    // ==================== Final Page: Contact ====================
+    doc.addPage();
+    doc.rect(0, 0, doc.page.width, doc.page.height).fill(darkColor);
+    
+    doc.fillColor('#ffffff')
+       .fontSize(28)
+       .font('Helvetica-Bold')
+       .text('Ready to Improve Your', 50, 200, { align: 'center' });
+    doc.fillColor(primaryColor)
+       .text('AI Reputation?', 50, 240, { align: 'center' });
+    
+    doc.fillColor('#ffffff')
+       .fontSize(14)
+       .font('Helvetica')
+       .text('Contact Abstrakt Marketing Group to discuss', 50, 320, { align: 'center' });
+    doc.text('strategies for improving your AI visibility and online reputation.', 50, 340, { align: 'center' });
+    
+    doc.fillColor(secondaryColor)
+       .fontSize(16)
+       .font('Helvetica-Bold')
+       .text('www.abstraktmg.com', 50, 400, { align: 'center' });
+    
+    doc.fillColor('rgba(255,255,255,0.5)')
+       .fontSize(10)
+       .font('Helvetica')
+       .text(`Report generated: ${new Date().toLocaleDateString()}`, 50, 700, { align: 'center' });
 
     doc.end();
   });
@@ -400,8 +586,8 @@ function generateEmailHTML(recipientName, recipientCompany, reportData) {
     
     <!-- Header -->
     <div style="background: linear-gradient(135deg, #E85D04, #F48C06); padding: 30px; text-align: center;">
-      <h1 style="color: #ffffff; margin: 0; font-size: 24px;">Entity SEO Analysis Report</h1>
-      <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 14px;">AI Search Visibility Analysis</p>
+      <h1 style="color: #ffffff; margin: 0; font-size: 24px;">AI Reputation Report</h1>
+      <p style="color: rgba(255,255,255,0.9); margin: 10px 0 0 0; font-size: 14px;">by Abstrakt Marketing Group</p>
     </div>
     
     <!-- Content -->
@@ -409,7 +595,7 @@ function generateEmailHTML(recipientName, recipientCompany, reportData) {
       <p style="font-size: 16px; color: #333;">Hi ${recipientName},</p>
       
       <p style="font-size: 14px; color: #666; line-height: 1.6;">
-        Your Entity SEO Analysis report for <strong>${reportData.companyName || 'your company'}</strong> is ready! 
+        Your AI Reputation Report for <strong>${reportData.companyName || 'your company'}</strong> is ready! 
         Please find the detailed PDF report attached to this email.
       </p>
       
@@ -429,20 +615,16 @@ function generateEmailHTML(recipientName, recipientCompany, reportData) {
       </div>
       
       <p style="font-size: 14px; color: #666; line-height: 1.6;">
-        The attached report includes:
+        Your report includes:
       </p>
       <ul style="font-size: 14px; color: #666; line-height: 1.8;">
-        <li>AI Search Engine Visibility Analysis (ChatGPT, Gemini, Claude, etc.)</li>
-        <li>Leadership Reputation Scoring</li>
-        <li>SEMRush Backlink Analysis</li>
-        <li>Competitor Comparison</li>
-        <li>Actionable Recommendations</li>
+        <li>Executive Overview & Key Metrics</li>
+        <li>Company AI Search Visibility Analysis</li>
+        <li>Leadership Reputation & Press Opportunities</li>
+        <li>Competitor Gap Analysis</li>
+        <li>Podcast Guest Opportunities</li>
+        <li>Social Sentiment Analysis</li>
       </ul>
-      
-      <p style="font-size: 14px; color: #666; line-height: 1.6;">
-        Have questions about your report or want to discuss strategies to improve your AI visibility? 
-        We're here to help!
-      </p>
       
       <!-- CTA Button -->
       <div style="text-align: center; margin: 30px 0;">
@@ -480,7 +662,7 @@ function generateEmailHTML(recipientName, recipientCompany, reportData) {
 
 // Helper functions
 function calculateAverageScore(companyResults) {
-  const scores = Object.values(companyResults)
+  const scores = Object.values(companyResults || {})
     .map(r => r.results?.confidenceScore || 0)
     .filter(s => s > 0);
   if (scores.length === 0) return 0;
@@ -488,23 +670,15 @@ function calculateAverageScore(companyResults) {
 }
 
 function calculateAverageSentiment(companyResults) {
-  const sentiments = Object.values(companyResults)
+  const sentiments = Object.values(companyResults || {})
     .map(r => r.results?.sentiment)
     .filter(Boolean);
   if (sentiments.length === 0) return 'Unknown';
   
   const counts = { positive: 0, neutral: 0, negative: 0 };
-  sentiments.forEach(s => counts[s] = (counts[s] || 0) + 1);
+  sentiments.forEach(s => counts[s.toLowerCase()] = (counts[s.toLowerCase()] || 0) + 1);
   
   return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
-}
-
-function getScoreLabel(score) {
-  if (score >= 8) return 'Excellent';
-  if (score >= 6) return 'Good';
-  if (score >= 4) return 'Needs Work';
-  if (score >= 2) return 'Poor';
-  return 'Critical';
 }
 
 function getScoreColorHex(score) {

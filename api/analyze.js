@@ -31,15 +31,36 @@ module.exports = async function handler(req, res) {
     let promptAddition = "";
     let jsonStructure = "";
 
-    if (analysisType === "backlinks") {
-      promptAddition = "Focus on finding backlinks, referring domains, link-building opportunities, and press coverage.";
+    if (analysisType === "press") {
+      promptAddition = "Focus on finding press opportunities, media outlets, industry publications, speaking engagements, and places where this person could contribute articles or be featured.";
       jsonStructure = `{
-  "summary": "2-3 sentence summary",
+  "summary": "2-3 sentence summary of press/media opportunities",
   "entityFound": true/false,
   "confidenceScore": 1-10,
-  "backlinks": [{"url": "url", "anchorText": "text", "domainAuthority": 1-100, "type": "editorial/directory/press/guest-post"}],
-  "pressOpportunities": [{"outlet": "name", "type": "press release/feature/interview", "relevance": "high/medium/low"}],
-  "recommendations": "specific recommendation"
+  "pressOpportunities": [{"outlet": "publication/media name", "type": "press release/feature/interview/contributed article/podcast/speaking", "relevance": "high/medium/low", "notes": "why this is a good fit"}],
+  "recommendations": "specific actionable recommendation for getting press coverage"
+}`;
+    } else if (analysisType === "social") {
+      promptAddition = "Focus on analyzing social media presence, sentiment on LinkedIn, Twitter/X, industry forums, and online discussions. Look for positive mentions, concerns, thought leadership presence, and overall reputation.";
+      jsonStructure = `{
+  "summary": "2-3 sentence summary of social media sentiment and online reputation",
+  "entityFound": true/false,
+  "confidenceScore": 1-10,
+  "sentimentScore": 1-10 (10 = very positive sentiment),
+  "sentiment": "positive/neutral/negative",
+  "platforms": [{"platform": "LinkedIn/Twitter/Forum name", "sentiment": "positive/neutral/negative", "notes": "key observations"}],
+  "positiveHighlights": ["positive mention 1", "positive mention 2"],
+  "concerns": ["concern or negative mention if any"],
+  "recommendations": "specific recommendation for improving social sentiment"
+}`;
+    } else if (analysisType === "podcast") {
+      promptAddition = "Focus on finding specific podcasts that would be good for executives to appear on as guests. Include both industry-specific podcasts and broader business podcasts. Provide podcast names, topics, and audience size estimates.";
+      jsonStructure = `{
+  "summary": "2-3 sentence summary of podcast opportunity landscape",
+  "entityFound": true/false,
+  "confidenceScore": 1-10,
+  "podcastOpportunities": [{"name": "podcast name", "topic": "main topics covered", "audienceSize": "small/medium/large", "host": "host name if known", "fit": "why this is a good match"}],
+  "recommendations": "strategy for approaching podcasts and what topics to pitch"
 }`;
     } else if (analysisType === "leadership") {
       promptAddition = "Focus on the person's online reputation, sentiment, thought leadership presence, media appearances, and speaking engagements.";
