@@ -1,6 +1,6 @@
 {
-  "name": "entity-seo-checker",
-  "version": "3.0.0",
+  "name": "ai-reputation-report",
+  "version": "4.0.0",
   "private": true,
   "dependencies": {
     "@anthropic-ai/sdk": "^0.39.0",
@@ -34,3 +34,4 @@
     ]
   }
 }
+
