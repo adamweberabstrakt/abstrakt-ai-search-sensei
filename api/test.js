@@ -121,3 +121,4 @@ function getAnthropicHint(error) {
   if (error.status === 500) return "Anthropic server error - try again later";
   return "Check Vercel function logs for details";
 }
+
