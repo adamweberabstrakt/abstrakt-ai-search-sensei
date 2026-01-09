@@ -46,6 +46,11 @@ const EntitySEOChecker = () => {
   const [debugMode, setDebugMode] = useState(false);
   const [debugLogs, setDebugLogs] = useState([]);
 
+  // Brand colors
+  const brandOrange = '#F46F0A';
+  const bgDark = '#333333';
+  const bgLight = '#EFEFEF';
+
   const llmOptions = [
     { id: 'chatgpt', name: 'ChatGPT', color: '#10a37f' },
     { id: 'gemini', name: 'Google Gemini', color: '#4285f4' },
@@ -447,26 +452,26 @@ const EntitySEOChecker = () => {
     return Object.entries(counts).sort((a, b) => b[1] - a[1])[0][0];
   };
 
-  // Styles
+  // Styles with new branding
   const styles = {
     container: {
       minHeight: '100vh',
-      background: 'linear-gradient(135deg, #1a1a2e 0%, #16213e 50%, #0f3460 100%)',
-      fontFamily: '"Source Sans 3", "Segoe UI", sans-serif',
-      color: '#e8e8e8',
+      background: `linear-gradient(135deg, ${bgDark} 0%, #2a2a2a 50%, #3d3d3d 100%)`,
+      fontFamily: '"Barlow Condensed", sans-serif',
+      color: bgLight,
       padding: '20px'
     },
     card: {
-      background: 'rgba(255,255,255,0.05)',
+      background: 'rgba(239,239,239,0.08)',
       borderRadius: '12px',
-      border: '1px solid rgba(255,255,255,0.1)',
+      border: '1px solid rgba(239,239,239,0.15)',
       padding: '24px',
       marginBottom: '20px'
     },
     introCard: {
-      background: 'linear-gradient(135deg, rgba(232,93,4,0.15) 0%, rgba(244,140,6,0.1) 100%)',
+      background: `linear-gradient(135deg, rgba(244,111,10,0.15) 0%, rgba(244,111,10,0.08) 100%)`,
       borderRadius: '16px',
-      border: '1px solid rgba(244,140,6,0.3)',
+      border: `1px solid ${brandOrange}40`,
       padding: '32px',
       marginBottom: '32px'
     },
@@ -474,30 +479,35 @@ const EntitySEOChecker = () => {
       width: '100%',
       padding: '12px 16px',
       borderRadius: '8px',
-      border: '1px solid rgba(255,255,255,0.2)',
-      background: 'rgba(0,0,0,0.3)',
-      color: '#fff',
-      fontSize: '14px',
+      border: '1px solid rgba(239,239,239,0.25)',
+      background: 'rgba(0,0,0,0.4)',
+      color: bgLight,
+      fontSize: '15px',
+      fontFamily: '"Barlow Condensed", sans-serif',
       marginTop: '8px',
       boxSizing: 'border-box'
     },
     button: {
-      background: 'linear-gradient(135deg, #E85D04 0%, #F48C06 100%)',
+      background: brandOrange,
       color: '#fff',
       border: 'none',
       padding: '14px 28px',
       borderRadius: '8px',
       fontSize: '16px',
       fontWeight: '600',
-      cursor: 'pointer'
+      fontFamily: '"Barlow Condensed", sans-serif',
+      cursor: 'pointer',
+      textTransform: 'uppercase',
+      letterSpacing: '0.5px'
     },
     buttonSecondary: {
-      background: 'rgba(255,255,255,0.1)',
-      color: '#fff',
-      border: '1px solid rgba(255,255,255,0.2)',
+      background: 'rgba(239,239,239,0.1)',
+      color: bgLight,
+      border: `1px solid rgba(239,239,239,0.25)`,
       padding: '10px 20px',
       borderRadius: '8px',
       fontSize: '14px',
+      fontFamily: '"Barlow Condensed", sans-serif',
       cursor: 'pointer'
     },
     tab: {
@@ -505,10 +515,13 @@ const EntitySEOChecker = () => {
       borderRadius: '8px 8px 0 0',
       cursor: 'pointer',
       fontSize: '14px',
-      fontWeight: '500',
+      fontWeight: '600',
+      fontFamily: '"Barlow Condensed", sans-serif',
       transition: 'all 0.2s',
       border: 'none',
-      marginRight: '4px'
+      marginRight: '4px',
+      textTransform: 'uppercase',
+      letterSpacing: '0.5px'
     },
     modal: {
       position: 'fixed',
@@ -516,23 +529,33 @@ const EntitySEOChecker = () => {
       left: 0,
       right: 0,
       bottom: 0,
-      background: 'rgba(0,0,0,0.8)',
+      background: 'rgba(0,0,0,0.85)',
       display: 'flex',
       alignItems: 'center',
       justifyContent: 'center',
       zIndex: 1000
     },
     modalContent: {
-      background: '#1a1a2e',
+      background: bgDark,
       borderRadius: '16px',
       padding: '32px',
       maxWidth: '450px',
       width: '90%',
-      border: '1px solid rgba(255,255,255,0.1)'
+      border: `1px solid rgba(239,239,239,0.15)`
     },
-    statHighlight: {
-      color: '#F48C06',
-      fontWeight: '700'
+    heading: {
+      fontFamily: '"Barlow Condensed", sans-serif',
+      fontWeight: '700',
+      textTransform: 'uppercase',
+      letterSpacing: '1px'
+    },
+    ctaSection: {
+      background: `linear-gradient(135deg, ${brandOrange}20 0%, ${brandOrange}10 100%)`,
+      borderRadius: '16px',
+      border: `2px solid ${brandOrange}`,
+      padding: '32px',
+      marginTop: '32px',
+      textAlign: 'center'
     }
   };
 
@@ -559,53 +582,53 @@ const EntitySEOChecker = () => {
   // Overview Tab
   const renderOverviewTab = () => (
     <div>
-      <h2 style={{ marginBottom: '24px', color: '#F48C06' }}>📊 Executive Summary</h2>
+      <h2 style={{ ...styles.heading, marginBottom: '24px', color: brandOrange, fontSize: '24px' }}>📊 EXECUTIVE SUMMARY</h2>
       
       {/* Quick Stats */}
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '16px', marginBottom: '24px' }}>
-        <div style={{ background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', textAlign: 'center' }}>
+        <div style={{ background: 'rgba(0,0,0,0.4)', padding: '20px', borderRadius: '12px', textAlign: 'center' }}>
           <div style={{ fontSize: '36px', fontWeight: '700', color: getScoreColor(getOverallScore()) }}>
             {getOverallScore()}/10
           </div>
-          <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.6)' }}>Overall AI Visibility</div>
+          <div style={{ fontSize: '14px', color: 'rgba(239,239,239,0.6)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Overall AI Visibility</div>
         </div>
-        <div style={{ background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', textAlign: 'center' }}>
+        <div style={{ background: 'rgba(0,0,0,0.4)', padding: '20px', borderRadius: '12px', textAlign: 'center' }}>
           <div style={{ fontSize: '36px', fontWeight: '700', color: '#3b82f6', textTransform: 'capitalize' }}>
             {getOverallSentiment()}
           </div>
-          <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.6)' }}>Overall Sentiment</div>
+          <div style={{ fontSize: '14px', color: 'rgba(239,239,239,0.6)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Overall Sentiment</div>
         </div>
         {semrushData?.authorityScore !== undefined && (
-          <div style={{ background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', textAlign: 'center' }}>
+          <div style={{ background: 'rgba(0,0,0,0.4)', padding: '20px', borderRadius: '12px', textAlign: 'center' }}>
             <div style={{ fontSize: '36px', fontWeight: '700', color: getScoreColor(semrushData.authorityScore / 10) }}>
               {semrushData.authorityScore}
             </div>
-            <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.6)' }}>Domain Authority</div>
+            <div style={{ fontSize: '14px', color: 'rgba(239,239,239,0.6)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Domain Authority</div>
           </div>
         )}
         {semrushData?.backlinks && (
-          <div style={{ background: 'rgba(0,0,0,0.3)', padding: '20px', borderRadius: '12px', textAlign: 'center' }}>
+          <div style={{ background: 'rgba(0,0,0,0.4)', padding: '20px', borderRadius: '12px', textAlign: 'center' }}>
             <div style={{ fontSize: '36px', fontWeight: '700', color: '#22c55e' }}>
               {semrushData.backlinks.referringDomains?.toLocaleString() || 0}
             </div>
-            <div style={{ fontSize: '14px', color: 'rgba(255,255,255,0.6)' }}>Referring Domains</div>
+            <div style={{ fontSize: '14px', color: 'rgba(239,239,239,0.6)', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Referring Domains</div>
           </div>
         )}
       </div>
 
       {/* AI Engine Breakdown */}
-      <h3 style={{ marginBottom: '16px', color: '#fff' }}>AI Search Engine Visibility</h3>
+      <h3 style={{ ...styles.heading, marginBottom: '16px', color: bgLight, fontSize: '18px' }}>AI SEARCH ENGINE VISIBILITY</h3>
       <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(150px, 1fr))', gap: '12px', marginBottom: '24px' }}>
         {Object.entries(results.company).map(([llmId, data]) => {
           const score = data.results?.confidenceScore || 0;
           return (
             <div key={llmId} style={{ 
-              background: 'rgba(0,0,0,0.3)', 
+              background: 'rgba(0,0,0,0.4)', 
               padding: '16px', 
               borderRadius: '8px',
               borderLeft: `4px solid ${data.llm.color}`
             }}>
-              <div style={{ fontSize: '12px', color: data.llm.color, marginBottom: '4px' }}>{data.llm.name}</div>
+              <div style={{ fontSize: '12px', color: data.llm.color, marginBottom: '4px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{data.llm.name}</div>
               <div style={{ fontSize: '24px', fontWeight: '700', color: getScoreColor(score) }}>{score}/10</div>
             </div>
           );
@@ -615,14 +638,14 @@ const EntitySEOChecker = () => {
       {/* Leadership Summary */}
       {results.leadership.length > 0 && (
         <>
-          <h3 style={{ marginBottom: '16px', color: '#fff' }}>Leadership Reputation Summary</h3>
+          <h3 style={{ ...styles.heading, marginBottom: '16px', color: bgLight, fontSize: '18px' }}>LEADERSHIP REPUTATION SUMMARY</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(200px, 1fr))', gap: '12px' }}>
             {results.leadership.map((leader, i) => {
               const avgScore = calculateAvgScore(leader.byLLM);
               return (
-                <div key={i} style={{ background: 'rgba(0,0,0,0.3)', padding: '16px', borderRadius: '8px' }}>
+                <div key={i} style={{ background: 'rgba(0,0,0,0.4)', padding: '16px', borderRadius: '8px' }}>
                   <div style={{ fontWeight: '600', marginBottom: '4px' }}>{leader.name}</div>
-                  <div style={{ fontSize: '12px', color: 'rgba(255,255,255,0.5)', marginBottom: '8px' }}>{leader.title}</div>
+                  <div style={{ fontSize: '12px', color: 'rgba(239,239,239,0.5)', marginBottom: '8px' }}>{leader.title}</div>
                   <div style={{ fontSize: '20px', fontWeight: '700', color: getScoreColor(avgScore) }}>{avgScore}/10</div>
                 </div>
               );
@@ -636,35 +659,35 @@ const EntitySEOChecker = () => {
   // Company Tab
   const renderCompanyTab = () => (
     <div>
-      <h2 style={{ marginBottom: '24px', color: '#F48C06' }}>🏢 Company AI Visibility: {results.companyName}</h2>
+      <h2 style={{ ...styles.heading, marginBottom: '24px', color: brandOrange, fontSize: '24px' }}>🏢 COMPANY AI VISIBILITY: {results.companyName}</h2>
       
       {/* SEMRush Data */}
       {semrushData && (
         <div style={{ ...styles.card, marginBottom: '24px' }}>
-          <h3 style={{ marginBottom: '16px' }}>SEMRush Backlink Profile</h3>
+          <h3 style={{ ...styles.heading, marginBottom: '16px', fontSize: '18px' }}>SEMRUSH BACKLINK PROFILE</h3>
           <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(120px, 1fr))', gap: '12px', marginBottom: '16px' }}>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '24px', fontWeight: '700', color: '#3b82f6' }}>{semrushData.backlinks?.total?.toLocaleString() || 0}</div>
-              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Total Backlinks</div>
+              <div style={{ fontSize: '11px', color: 'rgba(239,239,239,0.5)', textTransform: 'uppercase' }}>Total Backlinks</div>
             </div>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '24px', fontWeight: '700', color: '#22c55e' }}>{semrushData.backlinks?.referringDomains?.toLocaleString() || 0}</div>
-              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Ref. Domains</div>
+              <div style={{ fontSize: '11px', color: 'rgba(239,239,239,0.5)', textTransform: 'uppercase' }}>Ref. Domains</div>
             </div>
             <div style={{ textAlign: 'center' }}>
               <div style={{ fontSize: '24px', fontWeight: '700', color: '#eab308' }}>{semrushData.backlinks?.followLinks?.toLocaleString() || 0}</div>
-              <div style={{ fontSize: '11px', color: 'rgba(255,255,255,0.5)' }}>Follow Links</div>
+              <div style={{ fontSize: '11px', color: 'rgba(239,239,239,0.5)', textTransform: 'uppercase' }}>Follow Links</div>
             </div>
           </div>
           
           {semrushData.topBacklinks && semrushData.topBacklinks.length > 0 && (
             <>
-              <h4 style={{ marginBottom: '8px', fontSize: '14px' }}>Top Referring Domains</h4>
-              <div style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '8px', padding: '8px' }}>
+              <h4 style={{ marginBottom: '8px', fontSize: '14px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Top Referring Domains</h4>
+              <div style={{ background: 'rgba(0,0,0,0.3)', borderRadius: '8px', padding: '8px' }}>
                 {semrushData.topBacklinks.slice(0, 5).map((link, i) => (
-                  <div key={i} style={{ padding: '8px', borderBottom: i < 4 ? '1px solid rgba(255,255,255,0.1)' : 'none', fontSize: '13px' }}>
+                  <div key={i} style={{ padding: '8px', borderBottom: i < 4 ? '1px solid rgba(239,239,239,0.1)' : 'none', fontSize: '13px' }}>
                     <span style={{ color: '#3b82f6' }}>{link.sourceUrl}</span>
-                    <span style={{ color: 'rgba(255,255,255,0.5)', marginLeft: '8px' }}>(AS: {link.authorityScore})</span>
+                    <span style={{ color: 'rgba(239,239,239,0.5)', marginLeft: '8px' }}>(AS: {link.authorityScore})</span>
                   </div>
                 ))}
               </div>
@@ -681,13 +704,13 @@ const EntitySEOChecker = () => {
           
           return (
             <div key={llmId} style={{ 
-              background: 'rgba(0,0,0,0.3)', 
+              background: 'rgba(0,0,0,0.4)', 
               padding: '20px', 
               borderRadius: '12px',
               borderLeft: `4px solid ${hasError ? '#ef4444' : data.llm.color}`
             }}>
               <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-                <strong style={{ color: data.llm.color }}>{data.llm.name}</strong>
+                <strong style={{ color: data.llm.color, textTransform: 'uppercase', letterSpacing: '0.5px' }}>{data.llm.name}</strong>
                 {!hasError && (
                   <span style={{ 
                     background: getScoreColor(score),
@@ -705,12 +728,12 @@ const EntitySEOChecker = () => {
                 <p style={{ color: '#ef4444' }}>❌ {data.results.errorMessage}</p>
               ) : (
                 <>
-                  <p style={{ fontSize: '14px', marginBottom: '12px', color: 'rgba(255,255,255,0.8)', lineHeight: '1.5' }}>
+                  <p style={{ fontSize: '14px', marginBottom: '12px', color: 'rgba(239,239,239,0.8)', lineHeight: '1.5' }}>
                     {data.results?.summary}
                   </p>
                   {data.results?.recommendations && (
-                    <div style={{ background: 'rgba(248,140,6,0.1)', padding: '12px', borderRadius: '6px', fontSize: '13px' }}>
-                      <strong style={{ color: '#F48C06' }}>💡 Recommendation:</strong><br />
+                    <div style={{ background: `${brandOrange}15`, padding: '12px', borderRadius: '6px', fontSize: '13px' }}>
+                      <strong style={{ color: brandOrange }}>💡 Recommendation:</strong><br />
                       {data.results.recommendations}
                     </div>
                   )}
@@ -726,28 +749,28 @@ const EntitySEOChecker = () => {
   // Leaders Tab
   const renderLeadersTab = () => (
     <div>
-      <h2 style={{ marginBottom: '24px', color: '#F48C06' }}>👤 Leadership Reputation & Press Opportunities</h2>
+      <h2 style={{ ...styles.heading, marginBottom: '24px', color: brandOrange, fontSize: '24px' }}>👤 LEADERSHIP REPUTATION & PRESS OPPORTUNITIES</h2>
       
       {results.leadership.length === 0 ? (
-        <p style={{ color: 'rgba(255,255,255,0.6)' }}>No leadership team members were analyzed.</p>
+        <p style={{ color: 'rgba(239,239,239,0.6)' }}>No leadership team members were analyzed.</p>
       ) : (
         results.leadership.map((leader, idx) => (
           <div key={idx} style={{ ...styles.card, marginBottom: '24px' }}>
-            <h3 style={{ marginBottom: '4px' }}>{leader.name}</h3>
-            <p style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '16px' }}>{leader.title}</p>
+            <h3 style={{ ...styles.heading, marginBottom: '4px', fontSize: '20px' }}>{leader.name}</h3>
+            <p style={{ color: 'rgba(239,239,239,0.5)', marginBottom: '16px' }}>{leader.title}</p>
             
             {/* Reputation Scores */}
-            <h4 style={{ marginBottom: '12px', color: '#F48C06' }}>Reputation Scores</h4>
+            <h4 style={{ ...styles.heading, marginBottom: '12px', color: brandOrange, fontSize: '16px' }}>REPUTATION SCORES</h4>
             <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px', marginBottom: '20px' }}>
               {Object.entries(leader.byLLM).map(([llmId, data]) => (
                 <div key={llmId} style={{
-                  background: 'rgba(0,0,0,0.3)',
+                  background: 'rgba(0,0,0,0.4)',
                   padding: '12px 16px',
                   borderRadius: '8px',
                   borderLeft: `3px solid ${data.llm.color}`,
                   minWidth: '120px'
                 }}>
-                  <div style={{ fontSize: '11px', color: data.llm.color }}>{data.llm.name}</div>
+                  <div style={{ fontSize: '11px', color: data.llm.color, textTransform: 'uppercase' }}>{data.llm.name}</div>
                   <div style={{ fontSize: '20px', fontWeight: '700', color: getScoreColor(data.results?.sentimentScore || 5) }}>
                     {data.results?.sentimentScore || 5}/10
                   </div>
@@ -756,18 +779,18 @@ const EntitySEOChecker = () => {
             </div>
 
             {/* Press Opportunities */}
-            <h4 style={{ marginBottom: '12px', color: '#F48C06' }}>🎤 Press & Media Opportunities</h4>
-            <div style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
+            <h4 style={{ ...styles.heading, marginBottom: '12px', color: brandOrange, fontSize: '16px' }}>🎤 PRESS & MEDIA OPPORTUNITIES</h4>
+            <div style={{ background: 'rgba(0,0,0,0.3)', borderRadius: '8px', padding: '16px', marginBottom: '16px' }}>
               {Object.entries(leader.pressOpportunities || {}).map(([llmId, data]) => (
                 <div key={llmId} style={{ marginBottom: '16px' }}>
-                  <div style={{ fontSize: '12px', color: data.llm?.color, marginBottom: '8px' }}>{data.llm?.name}</div>
-                  <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'rgba(255,255,255,0.8)' }}>
+                  <div style={{ fontSize: '12px', color: data.llm?.color, marginBottom: '8px', textTransform: 'uppercase' }}>{data.llm?.name}</div>
+                  <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'rgba(239,239,239,0.8)' }}>
                     {data.results?.summary || data.results?.recommendations || 'No press opportunities found.'}
                   </p>
                   {data.results?.pressOpportunities && data.results.pressOpportunities.length > 0 && (
                     <ul style={{ marginTop: '8px', paddingLeft: '20px' }}>
                       {data.results.pressOpportunities.slice(0, 5).map((opp, i) => (
-                        <li key={i} style={{ fontSize: '13px', marginBottom: '4px', color: 'rgba(255,255,255,0.7)' }}>
+                        <li key={i} style={{ fontSize: '13px', marginBottom: '4px', color: 'rgba(239,239,239,0.7)' }}>
                           <strong>{opp.outlet}</strong> - {opp.type}
                         </li>
                       ))}
@@ -785,27 +808,27 @@ const EntitySEOChecker = () => {
   // Gap Analysis Tab
   const renderGapAnalysisTab = () => (
     <div>
-      <h2 style={{ marginBottom: '24px', color: '#F48C06' }}>⚔️ Competitor Gap Analysis</h2>
+      <h2 style={{ ...styles.heading, marginBottom: '24px', color: brandOrange, fontSize: '24px' }}>⚔️ COMPETITOR GAP ANALYSIS</h2>
       
       {results.competitors.length === 0 ? (
-        <p style={{ color: 'rgba(255,255,255,0.6)' }}>No competitors were analyzed.</p>
+        <p style={{ color: 'rgba(239,239,239,0.6)' }}>No competitors were analyzed.</p>
       ) : (
         <>
           {/* Comparison Table */}
           <div style={{ overflowX: 'auto', marginBottom: '24px' }}>
             <table style={{ width: '100%', borderCollapse: 'collapse', fontSize: '14px' }}>
               <thead>
-                <tr style={{ borderBottom: '2px solid rgba(255,255,255,0.2)' }}>
-                  <th style={{ padding: '12px', textAlign: 'left', color: '#F48C06' }}>Company</th>
-                  <th style={{ padding: '12px', textAlign: 'center' }}>Authority</th>
-                  <th style={{ padding: '12px', textAlign: 'center' }}>Backlinks</th>
-                  <th style={{ padding: '12px', textAlign: 'center' }}>Ref. Domains</th>
-                  <th style={{ padding: '12px', textAlign: 'center' }}>AI Score</th>
+                <tr style={{ borderBottom: `2px solid rgba(239,239,239,0.2)` }}>
+                  <th style={{ padding: '12px', textAlign: 'left', color: brandOrange, textTransform: 'uppercase', letterSpacing: '0.5px' }}>Company</th>
+                  <th style={{ padding: '12px', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Authority</th>
+                  <th style={{ padding: '12px', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Backlinks</th>
+                  <th style={{ padding: '12px', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Ref. Domains</th>
+                  <th style={{ padding: '12px', textAlign: 'center', textTransform: 'uppercase', letterSpacing: '0.5px' }}>AI Score</th>
                 </tr>
               </thead>
               <tbody>
                 {/* Your company row */}
-                <tr style={{ background: 'rgba(248,140,6,0.1)' }}>
+                <tr style={{ background: `${brandOrange}15` }}>
                   <td style={{ padding: '12px', fontWeight: '600' }}>{results.companyName} (You)</td>
                   <td style={{ padding: '12px', textAlign: 'center' }}>{semrushData?.authorityScore || '-'}</td>
                   <td style={{ padding: '12px', textAlign: 'center' }}>{semrushData?.backlinks?.total?.toLocaleString() || '-'}</td>
@@ -818,7 +841,7 @@ const EntitySEOChecker = () => {
                 </tr>
                 {/* Competitor rows */}
                 {results.competitors.map((comp, i) => (
-                  <tr key={i} style={{ borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+                  <tr key={i} style={{ borderBottom: '1px solid rgba(239,239,239,0.1)' }}>
                     <td style={{ padding: '12px' }}>{comp.name}</td>
                     <td style={{ padding: '12px', textAlign: 'center' }}>{comp.semrushData?.authorityScore || '-'}</td>
                     <td style={{ padding: '12px', textAlign: 'center' }}>{comp.semrushData?.backlinks?.total?.toLocaleString() || '-'}</td>
@@ -837,21 +860,21 @@ const EntitySEOChecker = () => {
           {/* Competitor Details & Backlink Gaps */}
           {results.competitors.map((comp, i) => (
             <div key={i} style={{ ...styles.card, marginBottom: '16px' }}>
-              <h3 style={{ marginBottom: '8px' }}>{comp.name}</h3>
-              {comp.website && <p style={{ color: 'rgba(255,255,255,0.5)', fontSize: '13px', marginBottom: '16px' }}>{comp.website}</p>}
+              <h3 style={{ ...styles.heading, marginBottom: '8px', fontSize: '18px' }}>{comp.name}</h3>
+              {comp.website && <p style={{ color: 'rgba(239,239,239,0.5)', fontSize: '13px', marginBottom: '16px' }}>{comp.website}</p>}
               
               {comp.semrushData?.topBacklinks && comp.semrushData.topBacklinks.length > 0 && (
                 <>
-                  <h4 style={{ marginBottom: '8px', color: '#F48C06' }}>🔗 Their Top Backlinks (Gap Opportunities)</h4>
-                  <div style={{ background: 'rgba(0,0,0,0.2)', borderRadius: '8px', padding: '12px' }}>
+                  <h4 style={{ ...styles.heading, marginBottom: '8px', color: brandOrange, fontSize: '14px' }}>🔗 THEIR TOP BACKLINKS (GAP OPPORTUNITIES)</h4>
+                  <div style={{ background: 'rgba(0,0,0,0.3)', borderRadius: '8px', padding: '12px' }}>
                     {comp.semrushData.topBacklinks.slice(0, 8).map((link, j) => (
                       <div key={j} style={{ 
                         padding: '8px 0', 
-                        borderBottom: j < 7 ? '1px solid rgba(255,255,255,0.1)' : 'none',
+                        borderBottom: j < 7 ? '1px solid rgba(239,239,239,0.1)' : 'none',
                         fontSize: '13px'
                       }}>
                         <span style={{ color: '#3b82f6' }}>{link.sourceUrl}</span>
-                        <span style={{ color: 'rgba(255,255,255,0.5)', marginLeft: '8px' }}>(AS: {link.authorityScore})</span>
+                        <span style={{ color: 'rgba(239,239,239,0.5)', marginLeft: '8px' }}>(AS: {link.authorityScore})</span>
                       </div>
                     ))}
                   </div>
@@ -867,33 +890,33 @@ const EntitySEOChecker = () => {
   // Podcasts Tab
   const renderPodcastsTab = () => (
     <div>
-      <h2 style={{ marginBottom: '24px', color: '#F48C06' }}>🎙️ Podcast Opportunities</h2>
+      <h2 style={{ ...styles.heading, marginBottom: '24px', color: brandOrange, fontSize: '24px' }}>🎙️ PODCAST OPPORTUNITIES</h2>
       
       {results.podcastOpportunities.length === 0 ? (
-        <p style={{ color: 'rgba(255,255,255,0.6)' }}>No podcast opportunities were analyzed.</p>
+        <p style={{ color: 'rgba(239,239,239,0.6)' }}>No podcast opportunities were analyzed.</p>
       ) : (
         <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(350px, 1fr))', gap: '16px' }}>
           {results.podcastOpportunities.map((item, idx) => (
             <div key={idx} style={{ 
-              background: 'rgba(0,0,0,0.3)', 
+              background: 'rgba(0,0,0,0.4)', 
               padding: '20px', 
               borderRadius: '12px',
               borderLeft: `4px solid ${item.llm.color}`
             }}>
-              <div style={{ fontSize: '12px', color: item.llm.color, marginBottom: '12px' }}>{item.llm.name}</div>
-              <p style={{ fontSize: '14px', lineHeight: '1.6', color: 'rgba(255,255,255,0.8)' }}>
+              <div style={{ fontSize: '12px', color: item.llm.color, marginBottom: '12px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>{item.llm.name}</div>
+              <p style={{ fontSize: '14px', lineHeight: '1.6', color: 'rgba(239,239,239,0.8)' }}>
                 {item.results?.summary || 'No summary available.'}
               </p>
               
               {item.results?.podcastOpportunities && item.results.podcastOpportunities.length > 0 && (
                 <div style={{ marginTop: '16px' }}>
-                  <h4 style={{ fontSize: '14px', marginBottom: '8px' }}>Recommended Podcasts:</h4>
+                  <h4 style={{ fontSize: '14px', marginBottom: '8px', textTransform: 'uppercase', letterSpacing: '0.5px' }}>Recommended Podcasts:</h4>
                   <ul style={{ paddingLeft: '20px', margin: 0 }}>
                     {item.results.podcastOpportunities.map((pod, i) => (
-                      <li key={i} style={{ fontSize: '13px', marginBottom: '8px', color: 'rgba(255,255,255,0.7)' }}>
+                      <li key={i} style={{ fontSize: '13px', marginBottom: '8px', color: 'rgba(239,239,239,0.7)' }}>
                         <strong>{pod.name}</strong>
                         {pod.topic && <span> - {pod.topic}</span>}
-                        {pod.audienceSize && <span style={{ color: '#F48C06' }}> ({pod.audienceSize} audience)</span>}
+                        {pod.audienceSize && <span style={{ color: brandOrange }}> ({pod.audienceSize} audience)</span>}
                       </li>
                     ))}
                   </ul>
@@ -901,8 +924,8 @@ const EntitySEOChecker = () => {
               )}
               
               {item.results?.recommendations && (
-                <div style={{ marginTop: '16px', background: 'rgba(248,140,6,0.1)', padding: '12px', borderRadius: '6px' }}>
-                  <strong style={{ color: '#F48C06', fontSize: '12px' }}>💡 Strategy:</strong>
+                <div style={{ marginTop: '16px', background: `${brandOrange}15`, padding: '12px', borderRadius: '6px' }}>
+                  <strong style={{ color: brandOrange, fontSize: '12px', textTransform: 'uppercase' }}>💡 Strategy:</strong>
                   <p style={{ fontSize: '13px', marginTop: '4px' }}>{item.results.recommendations}</p>
                 </div>
               )}
@@ -916,15 +939,15 @@ const EntitySEOChecker = () => {
   // Social Sentiment Tab
   const renderSentimentTab = () => (
     <div>
-      <h2 style={{ marginBottom: '24px', color: '#F48C06' }}>💬 Social Sentiment Analysis</h2>
+      <h2 style={{ ...styles.heading, marginBottom: '24px', color: brandOrange, fontSize: '24px' }}>💬 SOCIAL SENTIMENT ANALYSIS</h2>
       
       {results.leadership.length === 0 ? (
-        <p style={{ color: 'rgba(255,255,255,0.6)' }}>No leadership team members were analyzed for social sentiment.</p>
+        <p style={{ color: 'rgba(239,239,239,0.6)' }}>No leadership team members were analyzed for social sentiment.</p>
       ) : (
         results.leadership.map((leader, idx) => (
           <div key={idx} style={{ ...styles.card, marginBottom: '24px' }}>
-            <h3 style={{ marginBottom: '4px' }}>{leader.name}</h3>
-            <p style={{ color: 'rgba(255,255,255,0.5)', marginBottom: '16px' }}>{leader.title}</p>
+            <h3 style={{ ...styles.heading, marginBottom: '4px', fontSize: '20px' }}>{leader.name}</h3>
+            <p style={{ color: 'rgba(239,239,239,0.5)', marginBottom: '16px' }}>{leader.title}</p>
             
             {/* Social Sentiment by LLM */}
             <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(300px, 1fr))', gap: '16px' }}>
@@ -934,13 +957,13 @@ const EntitySEOChecker = () => {
                 
                 return (
                   <div key={llmId} style={{ 
-                    background: 'rgba(0,0,0,0.3)', 
+                    background: 'rgba(0,0,0,0.4)', 
                     padding: '16px', 
                     borderRadius: '8px',
                     borderLeft: `3px solid ${data.llm?.color}`
                   }}>
                     <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '12px' }}>
-                      <span style={{ fontSize: '12px', color: data.llm?.color }}>{data.llm?.name}</span>
+                      <span style={{ fontSize: '12px', color: data.llm?.color, textTransform: 'uppercase' }}>{data.llm?.name}</span>
                       <div style={{ display: 'flex', alignItems: 'center', gap: '8px' }}>
                         <span style={{ 
                           fontSize: '18px',
@@ -963,13 +986,13 @@ const EntitySEOChecker = () => {
                       </div>
                     </div>
                     
-                    <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'rgba(255,255,255,0.8)', marginBottom: '12px' }}>
+                    <p style={{ fontSize: '13px', lineHeight: '1.6', color: 'rgba(239,239,239,0.8)', marginBottom: '12px' }}>
                       {data.results?.summary || 'No social sentiment data available.'}
                     </p>
                     
                     {data.results?.recommendations && (
-                      <div style={{ background: 'rgba(248,140,6,0.1)', padding: '10px', borderRadius: '6px', fontSize: '12px' }}>
-                        <strong style={{ color: '#F48C06' }}>💡 Recommendation:</strong><br />
+                      <div style={{ background: `${brandOrange}15`, padding: '10px', borderRadius: '6px', fontSize: '12px' }}>
+                        <strong style={{ color: brandOrange }}>💡 Recommendation:</strong><br />
                         {data.results.recommendations}
                       </div>
                     )}
@@ -983,33 +1006,63 @@ const EntitySEOChecker = () => {
     </div>
   );
 
+  // CTA Section for end of report
+  const renderCTASection = () => (
+    <div style={styles.ctaSection}>
+      <h3 style={{ ...styles.heading, color: brandOrange, fontSize: '24px', marginBottom: '16px' }}>
+        GET A PERSONALIZED AI SEARCH STRATEGY FROM ABSTRAKT
+      </h3>
+      <p style={{ fontSize: '16px', color: 'rgba(239,239,239,0.8)', marginBottom: '24px', maxWidth: '600px', margin: '0 auto 24px' }}>
+        Ready to improve your AI visibility and outrank your competition? Our team of experts can create a customized strategy for your business.
+      </p>
+      <a 
+        href="https://www.abstraktmg.com/inbound-ai-visibility-tool/"
+        target="_blank"
+        rel="noopener noreferrer"
+        style={{
+          ...styles.button,
+          display: 'inline-block',
+          textDecoration: 'none',
+          fontSize: '18px',
+          padding: '16px 40px'
+        }}
+      >
+        Get Your Personalized Strategy →
+      </a>
+    </div>
+  );
+
   return (
     <div style={styles.container}>
+      {/* Google Font Import */}
+      <style>
+        {`@import url('https://fonts.googleapis.com/css2?family=Barlow+Condensed:wght@400;500;600;700&display=swap');`}
+      </style>
+      
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         
         {/* Header with Logo */}
-        <div style={{ textAlign: 'center', marginBottom: '40px' }}>
-          <div style={{ marginBottom: '16px' }}>
-            <img 
-              src="https://www.abstraktmg.com/wp-content/uploads/2023/05/Abstrakt-logo-white-transparent.png" 
-              alt="Abstrakt Marketing Group"
-              style={{ height: '50px', marginBottom: '8px' }}
-              onError={(e) => { e.target.style.display = 'none'; }}
-            />
+        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', marginBottom: '40px' }}>
+          <img 
+            src="/logo.png" 
+            alt="Abstrakt"
+            style={{ height: '60px' }}
+            onError={(e) => { e.target.style.display = 'none'; }}
+          />
+          <div>
+            <h1 style={{ 
+              ...styles.heading,
+              fontSize: '38px', 
+              color: brandOrange,
+              margin: 0,
+              lineHeight: 1.1
+            }}>
+              ABSTRAKT AI SEARCH SENSEI
+            </h1>
+            <p style={{ color: 'rgba(239,239,239,0.6)', fontSize: '14px', margin: '4px 0 0 0', textTransform: 'uppercase', letterSpacing: '1px' }}>
+              AI Reputation Report • Search Visibility • Competitive Analysis
+            </p>
           </div>
-          <h1 style={{ 
-            fontSize: '36px', 
-            fontWeight: '700',
-            background: 'linear-gradient(90deg, #E85D04, #F48C06)',
-            WebkitBackgroundClip: 'text',
-            WebkitTextFillColor: 'transparent',
-            marginBottom: '8px'
-          }}>
-            Abstrakt AI Search Sensei
-          </h1>
-          <p style={{ color: 'rgba(255,255,255,0.6)', fontSize: '16px' }}>
-            AI Reputation Report • Search Visibility • Competitive Analysis
-          </p>
         </div>
 
         {/* Error Display */}
@@ -1030,38 +1083,38 @@ const EntitySEOChecker = () => {
           <>
             {/* Intro Section - Why AI Search Matters */}
             <div style={styles.introCard}>
-              <h2 style={{ color: '#F48C06', marginBottom: '20px', fontSize: '24px', display: 'flex', alignItems: 'center', gap: '12px' }}>
-                <span style={{ fontSize: '32px' }}>🚀</span> Why AI Search Matters Now
+              <h2 style={{ ...styles.heading, color: brandOrange, marginBottom: '20px', fontSize: '26px', display: 'flex', alignItems: 'center', gap: '12px' }}>
+                <span style={{ fontSize: '32px' }}>🚀</span> WHY AI SEARCH MATTERS NOW
               </h2>
-              <p style={{ fontSize: '17px', lineHeight: '1.8', color: 'rgba(255,255,255,0.9)', marginBottom: '20px' }}>
+              <p style={{ fontSize: '17px', lineHeight: '1.8', color: 'rgba(239,239,239,0.9)', marginBottom: '20px' }}>
                 AI Search is shifting how people find and purchase things online. Recent research has shown that 
-                <span style={styles.statHighlight}> Google Click Thru Rate has dropped by 32% on average </span> 
+                <span style={{ color: brandOrange, fontWeight: '700' }}> Google Click Thru Rate has dropped by 32% on average </span> 
                 due to AI Overview and new AI platforms being used for search.
               </p>
-              <p style={{ fontSize: '17px', lineHeight: '1.8', color: 'rgba(255,255,255,0.9)' }}>
-                Being found online is more than your website now. It's your <strong style={{ color: '#F48C06' }}>entire digital footprint</strong> and 
+              <p style={{ fontSize: '17px', lineHeight: '1.8', color: 'rgba(239,239,239,0.9)' }}>
+                Being found online is more than your website now. It's your <strong style={{ color: brandOrange }}>entire digital footprint</strong> and 
                 our tool will help you quickly find the baseline of opportunity and where to start to outrank your competition.
               </p>
             </div>
 
             {/* Company Information */}
             <div style={styles.card}>
-              <h2 style={{ marginBottom: '20px', color: '#F48C06' }}>Company Information</h2>
+              <h2 style={{ ...styles.heading, marginBottom: '20px', color: brandOrange, fontSize: '20px' }}>COMPANY INFORMATION</h2>
               <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(250px, 1fr))', gap: '20px' }}>
                 <div>
-                  <label>Company Name *</label>
+                  <label style={{ textTransform: 'uppercase', fontSize: '12px', letterSpacing: '0.5px' }}>Company Name *</label>
                   <input type="text" name="companyName" value={formData.companyName} onChange={handleInputChange} placeholder="e.g., Abstrakt Marketing Group" style={styles.input} />
                 </div>
                 <div>
-                  <label>Website (for SEMRush data)</label>
+                  <label style={{ textTransform: 'uppercase', fontSize: '12px', letterSpacing: '0.5px' }}>Website (for SEMRush data)</label>
                   <input type="text" name="website" value={formData.website} onChange={handleInputChange} placeholder="e.g., abstraktmg.com" style={styles.input} />
                 </div>
                 <div>
-                  <label>Industry</label>
+                  <label style={{ textTransform: 'uppercase', fontSize: '12px', letterSpacing: '0.5px' }}>Industry</label>
                   <input type="text" name="industry" value={formData.industry} onChange={handleInputChange} placeholder="e.g., B2B Marketing" style={styles.input} />
                 </div>
                 <div>
-                  <label>Target Keywords</label>
+                  <label style={{ textTransform: 'uppercase', fontSize: '12px', letterSpacing: '0.5px' }}>Target Keywords</label>
                   <input type="text" name="keywords" value={formData.keywords} onChange={handleInputChange} placeholder="e.g., SEO, lead generation" style={styles.input} />
                 </div>
               </div>
@@ -1070,7 +1123,7 @@ const EntitySEOChecker = () => {
             {/* Leadership */}
             <div style={styles.card}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <h2 style={{ color: '#F48C06', margin: 0 }}>Leadership Team</h2>
+                <h2 style={{ ...styles.heading, color: brandOrange, margin: 0, fontSize: '20px' }}>LEADERSHIP TEAM</h2>
                 {formData.leadership.length < 5 && (
                   <button onClick={addLeadership} style={styles.buttonSecondary}>+ Add</button>
                 )}
@@ -1078,11 +1131,11 @@ const EntitySEOChecker = () => {
               {formData.leadership.map((leader, i) => (
                 <div key={i} style={{ display: 'grid', gridTemplateColumns: '1fr 1fr auto', gap: '12px', marginBottom: '12px', alignItems: 'end' }}>
                   <div>
-                    <label>Name</label>
+                    <label style={{ textTransform: 'uppercase', fontSize: '12px', letterSpacing: '0.5px' }}>Name</label>
                     <input type="text" value={leader.name} onChange={(e) => handleLeadershipChange(i, 'name', e.target.value)} placeholder="Full name" style={styles.input} />
                   </div>
                   <div>
-                    <label>Title</label>
+                    <label style={{ textTransform: 'uppercase', fontSize: '12px', letterSpacing: '0.5px' }}>Title</label>
                     <input type="text" value={leader.title} onChange={(e) => handleLeadershipChange(i, 'title', e.target.value)} placeholder="Job title" style={styles.input} />
                   </div>
                   {formData.leadership.length > 1 && (
@@ -1095,32 +1148,32 @@ const EntitySEOChecker = () => {
             {/* Competitors */}
             <div style={styles.card}>
               <div style={{ display: 'flex', justifyContent: 'space-between', alignItems: 'center', marginBottom: '20px' }}>
-                <h2 style={{ color: '#F48C06', margin: 0 }}>Competitors</h2>
+                <h2 style={{ ...styles.heading, color: brandOrange, margin: 0, fontSize: '20px' }}>COMPETITORS</h2>
                 {formData.competitors.length < 3 && (
                   <button onClick={addCompetitor} style={styles.buttonSecondary}>+ Add</button>
                 )}
               </div>
               {formData.competitors.map((comp, i) => (
-                <div key={i} style={{ background: 'rgba(0,0,0,0.2)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
+                <div key={i} style={{ background: 'rgba(0,0,0,0.3)', padding: '16px', borderRadius: '8px', marginBottom: '12px' }}>
                   <div style={{ display: 'flex', justifyContent: 'space-between', marginBottom: '12px' }}>
-                    <strong>Competitor {i + 1}</strong>
+                    <strong style={{ textTransform: 'uppercase', letterSpacing: '0.5px' }}>Competitor {i + 1}</strong>
                     <button onClick={() => removeCompetitor(i)} style={styles.buttonSecondary}>Remove</button>
                   </div>
                   <div style={{ display: 'grid', gridTemplateColumns: 'repeat(auto-fit, minmax(180px, 1fr))', gap: '12px' }}>
                     <div>
-                      <label>Company</label>
+                      <label style={{ textTransform: 'uppercase', fontSize: '12px', letterSpacing: '0.5px' }}>Company</label>
                       <input type="text" value={comp.name} onChange={(e) => handleCompetitorChange(i, 'name', e.target.value)} placeholder="Name" style={styles.input} />
                     </div>
                     <div>
-                      <label>Website</label>
+                      <label style={{ textTransform: 'uppercase', fontSize: '12px', letterSpacing: '0.5px' }}>Website</label>
                       <input type="text" value={comp.website} onChange={(e) => handleCompetitorChange(i, 'website', e.target.value)} placeholder="website.com" style={styles.input} />
                     </div>
                     <div>
-                      <label>Leader Name</label>
+                      <label style={{ textTransform: 'uppercase', fontSize: '12px', letterSpacing: '0.5px' }}>Leader Name</label>
                       <input type="text" value={comp.leadership.name} onChange={(e) => handleCompetitorChange(i, 'leadership.name', e.target.value)} placeholder="CEO name" style={styles.input} />
                     </div>
                     <div>
-                      <label>Leader Title</label>
+                      <label style={{ textTransform: 'uppercase', fontSize: '12px', letterSpacing: '0.5px' }}>Leader Title</label>
                       <input type="text" value={comp.leadership.title} onChange={(e) => handleCompetitorChange(i, 'leadership.title', e.target.value)} placeholder="Title" style={styles.input} />
                     </div>
                   </div>
@@ -1130,7 +1183,7 @@ const EntitySEOChecker = () => {
 
             {/* LLM Selection */}
             <div style={styles.card}>
-              <h2 style={{ marginBottom: '20px', color: '#F48C06' }}>AI Search Engines</h2>
+              <h2 style={{ ...styles.heading, marginBottom: '20px', color: brandOrange, fontSize: '20px' }}>AI SEARCH ENGINES</h2>
               <div style={{ display: 'flex', flexWrap: 'wrap', gap: '12px' }}>
                 {llmOptions.map(llm => (
                   <div
@@ -1139,18 +1192,20 @@ const EntitySEOChecker = () => {
                     style={{
                       padding: '10px 16px',
                       borderRadius: '20px',
-                      border: `2px solid ${selectedLLMs[llm.id] ? llm.color : 'rgba(255,255,255,0.2)'}`,
+                      border: `2px solid ${selectedLLMs[llm.id] ? llm.color : 'rgba(239,239,239,0.25)'}`,
                       background: selectedLLMs[llm.id] ? `${llm.color}20` : 'transparent',
-                      color: selectedLLMs[llm.id] ? llm.color : 'rgba(255,255,255,0.6)',
+                      color: selectedLLMs[llm.id] ? llm.color : 'rgba(239,239,239,0.6)',
                       cursor: 'pointer',
-                      fontSize: '14px'
+                      fontSize: '14px',
+                      textTransform: 'uppercase',
+                      letterSpacing: '0.5px'
                     }}
                   >
                     {selectedLLMs[llm.id] ? '✓ ' : ''}{llm.name}
                   </div>
                 ))}
               </div>
-              <p style={{ marginTop: '12px', fontSize: '12px', color: 'rgba(255,255,255,0.5)' }}>
+              <p style={{ marginTop: '12px', fontSize: '12px', color: 'rgba(239,239,239,0.5)' }}>
                 💡 Fewer LLMs = lower API costs. ChatGPT + Gemini recommended for most analyses.
               </p>
             </div>
@@ -1164,15 +1219,15 @@ const EntitySEOChecker = () => {
                   ...styles.button,
                   opacity: (loading || !formData.companyName) ? 0.5 : 1,
                   cursor: (loading || !formData.companyName) ? 'not-allowed' : 'pointer',
-                  minWidth: '260px',
+                  minWidth: '280px',
                   fontSize: '18px',
-                  padding: '18px 36px'
+                  padding: '18px 40px'
                 }}
               >
-                {loading ? `Analyzing... (${progress.current}/${progress.total})` : '🔍 Generate AI Reputation Report'}
+                {loading ? `ANALYZING... (${progress.current}/${progress.total})` : '🔍 GENERATE AI REPUTATION REPORT'}
               </button>
               {loading && progress.message && (
-                <p style={{ marginTop: '12px', color: '#F48C06' }}>{progress.message}</p>
+                <p style={{ marginTop: '12px', color: brandOrange }}>{progress.message}</p>
               )}
             </div>
           </>
@@ -1183,10 +1238,10 @@ const EntitySEOChecker = () => {
           <>
             {/* Report Header */}
             <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-              <h2 style={{ color: '#F48C06', fontSize: '28px', marginBottom: '8px' }}>
-                AI Reputation Report
+              <h2 style={{ ...styles.heading, color: brandOrange, fontSize: '32px', marginBottom: '8px' }}>
+                AI REPUTATION REPORT
               </h2>
-              <p style={{ color: 'rgba(255,255,255,0.6)' }}>
+              <p style={{ color: 'rgba(239,239,239,0.6)', textTransform: 'uppercase', letterSpacing: '1px' }}>
                 {results.companyName} • Generated {new Date().toLocaleDateString()}
               </p>
             </div>
@@ -1194,24 +1249,24 @@ const EntitySEOChecker = () => {
             {/* Action Buttons */}
             <div style={{ display: 'flex', gap: '12px', marginBottom: '20px', flexWrap: 'wrap' }}>
               <button onClick={() => setShowEmailModal(true)} style={styles.button}>
-                📧 Email My Report
+                📧 EMAIL MY REPORT
               </button>
               <button onClick={() => setResults(null)} style={styles.buttonSecondary}>
-                ← New Report
+                ← NEW REPORT
               </button>
             </div>
 
             {/* Tabs */}
-            <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: '0', borderBottom: '1px solid rgba(255,255,255,0.1)' }}>
+            <div style={{ display: 'flex', flexWrap: 'wrap', marginBottom: '0', borderBottom: `1px solid rgba(239,239,239,0.15)` }}>
               {tabs.map(tab => (
                 <button
                   key={tab.id}
                   onClick={() => setActiveTab(tab.id)}
                   style={{
                     ...styles.tab,
-                    background: activeTab === tab.id ? 'rgba(248,140,6,0.2)' : 'transparent',
-                    color: activeTab === tab.id ? '#F48C06' : 'rgba(255,255,255,0.6)',
-                    borderBottom: activeTab === tab.id ? '2px solid #F48C06' : '2px solid transparent'
+                    background: activeTab === tab.id ? `${brandOrange}25` : 'transparent',
+                    color: activeTab === tab.id ? brandOrange : 'rgba(239,239,239,0.6)',
+                    borderBottom: activeTab === tab.id ? `2px solid ${brandOrange}` : '2px solid transparent'
                   }}
                 >
                   {tab.icon} {tab.label}
@@ -1223,15 +1278,18 @@ const EntitySEOChecker = () => {
             <div style={{ ...styles.card, borderTopLeftRadius: 0 }}>
               {renderTabContent()}
             </div>
+
+            {/* CTA Section */}
+            {renderCTASection()}
           </>
         )}
 
         {/* Debug Logs */}
         {debugMode && debugLogs.length > 0 && (
-          <div style={{ ...styles.card, background: 'rgba(0,0,0,0.5)', fontFamily: 'monospace', fontSize: '11px', maxHeight: '300px', overflow: 'auto' }}>
-            <h4 style={{ color: '#F48C06' }}>Debug Logs</h4>
+          <div style={{ ...styles.card, background: 'rgba(0,0,0,0.6)', fontFamily: 'monospace', fontSize: '11px', maxHeight: '300px', overflow: 'auto' }}>
+            <h4 style={{ color: brandOrange }}>Debug Logs</h4>
             {debugLogs.map((log, i) => (
-              <div key={i} style={{ borderBottom: '1px solid #333', paddingBottom: '4px', marginBottom: '4px' }}>
+              <div key={i} style={{ borderBottom: '1px solid #444', paddingBottom: '4px', marginBottom: '4px' }}>
                 <span style={{ color: '#888' }}>[{log.ts}]</span> {log.msg}
               </div>
             ))}
@@ -1242,20 +1300,20 @@ const EntitySEOChecker = () => {
         {showEmailModal && (
           <div style={styles.modal} onClick={() => setShowEmailModal(false)}>
             <div style={styles.modalContent} onClick={e => e.stopPropagation()}>
-              <h2 style={{ marginBottom: '24px', color: '#F48C06' }}>📧 Email My Report</h2>
+              <h2 style={{ ...styles.heading, marginBottom: '24px', color: brandOrange, fontSize: '22px' }}>📧 EMAIL MY REPORT</h2>
               
               <div style={{ marginBottom: '16px' }}>
-                <label>Your Name *</label>
+                <label style={{ textTransform: 'uppercase', fontSize: '12px', letterSpacing: '0.5px' }}>Your Name *</label>
                 <input type="text" value={emailForm.name} onChange={(e) => setEmailForm(prev => ({ ...prev, name: e.target.value }))} placeholder="John Smith" style={styles.input} />
               </div>
               
               <div style={{ marginBottom: '16px' }}>
-                <label>Company *</label>
+                <label style={{ textTransform: 'uppercase', fontSize: '12px', letterSpacing: '0.5px' }}>Company *</label>
                 <input type="text" value={emailForm.company} onChange={(e) => setEmailForm(prev => ({ ...prev, company: e.target.value }))} placeholder="Your Company Name" style={styles.input} />
               </div>
               
               <div style={{ marginBottom: '24px' }}>
-                <label>Email Address *</label>
+                <label style={{ textTransform: 'uppercase', fontSize: '12px', letterSpacing: '0.5px' }}>Email Address *</label>
                 <input type="email" value={emailForm.email} onChange={(e) => setEmailForm(prev => ({ ...prev, email: e.target.value }))} placeholder="you@company.com" style={styles.input} />
               </div>
 
@@ -1273,10 +1331,10 @@ const EntitySEOChecker = () => {
 
               <div style={{ display: 'flex', gap: '12px' }}>
                 <button onClick={sendEmailReport} disabled={emailSending} style={{ ...styles.button, flex: 1, opacity: emailSending ? 0.5 : 1 }}>
-                  {emailSending ? 'Sending...' : 'Send Report'}
+                  {emailSending ? 'SENDING...' : 'SEND REPORT'}
                 </button>
                 <button onClick={() => setShowEmailModal(false)} style={styles.buttonSecondary}>
-                  Cancel
+                  CANCEL
                 </button>
               </div>
             </div>
@@ -1284,7 +1342,7 @@ const EntitySEOChecker = () => {
         )}
 
         {/* Footer */}
-        <div style={{ textAlign: 'center', padding: '20px', color: 'rgba(255,255,255,0.4)', fontSize: '12px' }}>
+        <div style={{ textAlign: 'center', padding: '20px', color: 'rgba(239,239,239,0.4)', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>
           Built by Abstrakt Marketing Group | Abstrakt AI Search Sensei
         </div>
       </div>
