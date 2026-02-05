@@ -1204,13 +1204,19 @@ const EntitySEOChecker = () => {
       
       <div style={{ maxWidth: '1400px', margin: '0 auto' }}>
         
-        {/* Header */}
-        <div style={{ display: 'flex', alignItems: 'center', justifyContent: 'center', gap: '20px', marginBottom: '40px' }}>
-          <img src="/logo.png" alt="Abstrakt" style={{ height: '60px' }} onError={(e) => { e.target.style.display = 'none'; }} />
+        {/* Abstrakt Labs badge */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '10px', marginBottom: '24px' }}>
+          <img src="/logo.png" alt="Abstrakt" style={{ height: '32px' }} onError={(e) => { e.target.style.display = 'none'; }} />
+          <span style={{ ...styles.heading, fontSize: '14px', color: 'rgba(239,239,239,0.5)', letterSpacing: '2px' }}>LABS</span>
+        </div>
+
+        {/* Beacon Header */}
+        <div style={{ display: 'flex', alignItems: 'center', gap: '24px', marginBottom: '40px' }}>
+          <img src="/beacon-logo.jpeg" alt="Beacon" style={{ height: '72px', borderRadius: '12px' }} onError={(e) => { e.target.style.display = 'none'; }} />
           <div>
-            <h1 style={{ ...styles.heading, fontSize: '38px', color: brandOrange, margin: 0, lineHeight: 1.1 }}>ABSTRAKT AI SEARCH SENSEI</h1>
-            <p style={{ color: 'rgba(239,239,239,0.6)', fontSize: '14px', margin: '4px 0 0 0', textTransform: 'uppercase', letterSpacing: '1px' }}>
-              Digital Audit • AI Visibility • Traditional SEO • Entity Analysis
+            <h1 style={{ ...styles.heading, fontSize: '42px', color: '#ef4444', margin: 0, lineHeight: 1.1 }}>BEACON</h1>
+            <p style={{ color: 'rgba(239,239,239,0.6)', fontSize: '15px', margin: '4px 0 0 0', textTransform: 'uppercase', letterSpacing: '1.5px' }}>
+              AI Search Visibility Test
             </p>
           </div>
         </div>
@@ -1371,7 +1377,7 @@ const EntitySEOChecker = () => {
             <div style={{ textAlign: 'center', marginBottom: '40px' }}>
               <button onClick={runAnalysis} disabled={loading || !formData.companyName}
                 style={{ ...styles.button, opacity: (loading || !formData.companyName) ? 0.5 : 1, cursor: (loading || !formData.companyName) ? 'not-allowed' : 'pointer', minWidth: '280px', fontSize: '18px', padding: '18px 40px' }}>
-                {loading ? 'ANALYZING... (' + progress.current + '/' + progress.total + ')' : '🔍 GENERATE DIGITAL AUDIT REPORT'}
+                {loading ? 'ANALYZING... (' + progress.current + '/' + progress.total + ')' : '🔍 RUN BEACON VISIBILITY TEST'}
               </button>
               {loading && progress.message && <p style={{ marginTop: '12px', color: brandOrange }}>{progress.message}</p>}
             </div>
@@ -1382,7 +1388,7 @@ const EntitySEOChecker = () => {
         {results && (
           <>
             <div style={{ textAlign: 'center', marginBottom: '24px' }}>
-              <h2 style={{ ...styles.heading, color: brandOrange, fontSize: '32px', marginBottom: '8px' }}>DIGITAL AUDIT REPORT</h2>
+              <h2 style={{ ...styles.heading, color: '#ef4444', fontSize: '32px', marginBottom: '8px' }}>BEACON VISIBILITY REPORT</h2>
               <p style={{ color: 'rgba(239,239,239,0.6)', textTransform: 'uppercase', letterSpacing: '1px' }}>{results.companyName} • Generated {new Date().toLocaleDateString()}</p>
             </div>
 
@@ -1458,7 +1464,7 @@ const EntitySEOChecker = () => {
         )}
 
         <div style={{ textAlign: 'center', padding: '20px', color: 'rgba(239,239,239,0.4)', fontSize: '12px', textTransform: 'uppercase', letterSpacing: '1px' }}>
-          Built by Abstrakt Marketing Group | Abstrakt AI Search Sensei
+          Built by Abstrakt Marketing Group | Beacon — AI Search Visibility Test
         </div>
       </div>
     </div>
