@@ -45,7 +45,7 @@ const EntitySEOChecker = () => {
   const [emailStatus, setEmailStatus] = useState(null);
 
   // Debug state
-  const [debugMode, setDebugMode] = useState(false);
+ const [debugMode] = useState(false);
   const [debugLogs, setDebugLogs] = useState([]);
 
   // Brand colors
