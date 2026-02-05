@@ -25,7 +25,7 @@ module.exports = async function handler(req, res) {
       companyName,
       website,
       industry,
-      // Form fields specific to Search Sensei
+      // Form fields specific to Beacon
       keywords,
       leadership,
       competitors,
@@ -37,7 +37,7 @@ module.exports = async function handler(req, res) {
       return res.status(400).json({ error: 'Email is required' });
     }
 
-    // Build payload matching Adsmith's shared fields + Search Sensei extras
+    // Build payload matching Adsmith's shared fields + Beacon extras
     const payload = {
       // Shared fields (same as Adsmith)
       email: email,
@@ -45,7 +45,7 @@ module.exports = async function handler(req, res) {
       companyName: companyName || '',
       websiteUrl: website || '',
       industry: industry || '',
-      // Search Sensei specific fields
+      // Beacon specific fields
       keywords: Array.isArray(keywords) ? keywords.filter(Boolean).join(', ') : (keywords || ''),
       leadership: Array.isArray(leadership)
         ? leadership.filter(l => l.name).map(l => `${l.name} (${l.title || l.role || 'N/A'})`).join('; ')
@@ -56,7 +56,7 @@ module.exports = async function handler(req, res) {
       checkLocalSeo: checkLocalSeo ? 'Yes' : 'No',
       address: address || '',
       // Identification
-      source_tool: 'Search Sensei',
+      source_tool: 'Beacon',
       timestamp: new Date().toISOString(),
     };
 
